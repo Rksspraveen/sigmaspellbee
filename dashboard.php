@@ -1,4 +1,4 @@
-<?php include 'access_check.php'; ?>
+<?php //include 'access_check.php'; ?>
 
 <?php
 
@@ -20,7 +20,7 @@ $q = $qres[0] + 1;
 
 $statuscheck = mysqli_fetch_assoc(mysqli_query($conn, "SELECT `status` from users where pid='$sid';"))['status'];
 if ($statuscheck == 0)
-	header('Location: index.php?stop');
+	//header('Location: index.php?stop');
 
 if (isset($_GET['qid'])) {
 	$qid = (int) $_GET['qid'];
