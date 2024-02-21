@@ -8,23 +8,19 @@ if (!empty($_SESSION['admin'])) {
 if (isset($_POST['submit'])) {
   $admin = $_POST['admin'];
   $pass = $_POST['pass'];
-  if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `admins` WHERE `mobile`='$admin' AND `password`='$pass'")) == 1) {
-    $_SESSION['category'] = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `admins` WHERE `mobile`='$admin' AND `password`='$pass'"))['category'];
 
+  if($admin = "9052727402" and $pass = "sigma2k24"){
     $_SESSION['admin'] = $admin;
-    if($_SESSION['category'] == 'stall' || $_SESSION['category'] == 'superadmin')
     header("location: index.php");
-    else
-    header("location: students.php");
-
-  } else {
-    echo "<script>alert('This is Not For You')</script>";
   }
+  else echo "<script>alert('Wrong Username or Password!');</script>";
+
 }
 
 ?>
 <!DOCTYPE html>
 <html lang="en" class="light-style customizer-hide" dir="ltr" data-theme="theme-default" data-assets-path="Bhavani/" data-template="vertical-menu-template-free">
+  
 
 <head>
   <meta charset="utf-8" />
