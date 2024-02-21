@@ -8,25 +8,17 @@ include "connect.php";
 if (isset($_POST['addnewstudent'])) {
   $sname = $_POST['sname'];
   $regno = $_POST['regno'];
-  $email = $_POST['email'];
   $mobile = $_POST['mobile'];
   $branch = $_POST['branch'];
   $section = $_POST['section'];
-  if (isset($_POST['paymentinfo'])) $paymentinfo = 1;
-  else $paymentinfo = 0;
-  if (isset($_POST['gamestatus']) and isset($_POST['paymentinfo'])) $gamestatus = 1;
-  else $gamestatus = 0;
   $batch = $_POST['batch'];
   if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `users` WHERE `pid` = '$mobile' or `regno` = '$regno'")) > 0) {
     echo "<script>alert('Student Already Registered');</script>";
   } else {
-    if ($paymentinfo == 1) {
-      $addnewstudent = $conn->prepare("INSERT INTO `users`(`pid`, `player_name`,`status` ,`place`, `regno`, `email`, `department`, `section`, `payment_status`,`admin`,`pconfprby`) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-      $addnewstudent->bind_param("ssiissssiss", $mobile, $sname, $gamestatus, $batch, $regno, $email, $branch, $section, $paymentinfo, $admin,$admin);
-    } else {
-      $addnewstudent = $conn->prepare("INSERT INTO `users`(`pid`, `player_name`,`status` ,`place`, `regno`, `email`, `department`, `section`, `payment_status`,`admin`) VALUES (?,?,?,?,?,?,?,?,?,?)");
-      $addnewstudent->bind_param("ssiissssis", $mobile, $sname, $gamestatus, $batch, $regno, $email, $branch, $section, $paymentinfo,$admin);
-    }
+    
+      $addnewstudent = $conn->prepare("INSERT INTO `users`(`pid`, `player_name`, `status`, `lastseen`, `regno`, `department`) VALUES ()");
+      $addnewstudent->bind_param("ssiissssis", $mobile, $sname, $gamestatus, $regno, $email, $branch, $paymentinfo,$admin);
+    
     if ($addnewstudent->execute()) {
       echo "<script>alert('New Student Added Successfully');</script>";
     } else {
