@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 21, 2024 at 02:28 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Feb 22, 2024 at 05:29 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -11491,15 +11491,21 @@ INSERT INTO `responses` (`sid`, `qid`, `answer`, `marks`, `timestamp`) VALUES
 
 CREATE TABLE `users` (
   `pid` varchar(10) NOT NULL,
-  `pin` varchar(4) DEFAULT '0000',
   `player_name` varchar(100) DEFAULT NULL,
   `status` int(1) NOT NULL DEFAULT 0,
   `points` int(5) DEFAULT NULL,
   `lastseen` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `regno` varchar(15) NOT NULL,
   `department` varchar(10) NOT NULL,
-  `section` varchar(2) NOT NULL
+  `place` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`pid`, `player_name`, `status`, `points`, `lastseen`, `regno`, `department`, `place`) VALUES
+('9052727402', 'Shiva Bhavani', 1, 1, '2024-02-22 16:24:48', '21B91A6206', 'CSD', 2025);
 
 -- --------------------------------------------------------
 
