@@ -10,20 +10,12 @@ if (isset($_POST['addnewstudent'])) {
   $regno = $_POST['regno'];
   $mobile = $_POST['mobile'];
   $branch = $_POST['branch'];
-  $section = $_POST['section'];
   $batch = $_POST['batch'];
   if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `users` WHERE `pid` = '$mobile' or `regno` = '$regno'")) > 0) {
     echo "<script>alert('Student Already Registered');</script>";
   } else {
-    
-      $addnewstudent = $conn->prepare("INSERT INTO `users`(`pid`, `player_name`, `status`, `lastseen`, `regno`, `department`) VALUES ()");
-      $addnewstudent->bind_param("ssiissssis", $mobile, $sname, $gamestatus, $regno, $email, $branch, $paymentinfo,$admin);
-    
-    if ($addnewstudent->execute()) {
-      echo "<script>alert('New Student Added Successfully');</script>";
-    } else {
-      echo "<script>alert('You are already Registered');</script>";
-    }
+    $add = mysqli_query($conn, "INSERT INTO `users`(`pid`, `player_name`, `status`, `regno`, `department`, `place`) VALUES ('$mobile', '$sname', 1, '$regno', '$branch', '$batch')");
+    echo "<script>alert('Student Registered sucessfully');</script>";
   }
 }
 ?>
@@ -99,20 +91,10 @@ if (isset($_POST['addnewstudent'])) {
                   <div class="input-group input-group-merge">
                     <input type="text" required autocomplete="off" class="form-control" id="regno" name="regno" placeholder="student College ID" />
                   </div>
-                  <div class="form-text">For Juniours use their dept and remaning are last digits of mobile number must be length 10</div>
                   <div id="regno-error" class="error"></div>
                 </div>
               </div>
-              <div class="row mb-3">
-                <label class="col-sm-2 col-form-label" for="email">Email</label>
-                <div class="col-sm-10">
-                  <div class="input-group input-group-merge">
-                    <input type="email" name="email" id="email" autocomplete="off" class="form-control" placeholder="Student Email" aria-label="john.doe" aria-describedby="basic-default-email2" required />
-                  </div>
-                  <div id="email-error" class="error"></div>
-                  <div class="form-text">You can use letters, numbers & periods</div>
-                </div>
-              </div>
+              
               <div class="row mb-3">
                 <label class="col-sm-2 col-form-label" for="mobile">Mobile No</label>
                 <div class="col-sm-10">
@@ -144,24 +126,6 @@ if (isset($_POST['addnewstudent'])) {
                 </div>
               </div>
               <div class="row mb-3">
-                <label class="col-sm-2 col-form-label" for="section">SECTION</label>
-                <div class="col-sm-10">
-                  <div class="input-group input-group-merge">
-                    <select class="form-select" id="section" name="section" aria-label="Default select example">
-                      <option selected value="">Select Student Section</option>
-                      <option value="A">A</option>
-                      <option value="B">B</option>
-                      <option value="C">C</option>
-                      <option value="D">D</option>
-                      <option value="E">E</option>
-                      <option value="F">F</option>
-                    </select>
-                    <div id="section-error" class="error"></div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row mb-3">
                 <label class="col-sm-2 col-form-label" for="batch">Batch</label>
                 <div class="col-sm-10">
                   <div class="input-group input-group-merge">
@@ -176,21 +140,7 @@ if (isset($_POST['addnewstudent'])) {
                   </div>
                 </div>
               </div>
-              <div class="row mb-3">
-                <div class="col-sm-10">
-                  <input class="form-check-input" type="checkbox" name="paymentinfo" value="1" id="defaultCheck1" />
-                  <label class="form-check-label" for="defaultCheck1"> Payment Confirmation </label>
-                </div>
-                <!-- Error placeholder for payment confirmation -->
-                <div id="paymentinfo-error" class="error"></div>
-              </div>
-              <div class="row mb-3">
-                <div class="col-sm-10">
-                  <input class="form-check-input" type="checkbox" name="gamestatus" value="1" id="defaultCheck2" />
-                  <label class="form-check-label" for="defaultCheck2"> Allow to Play</label>
-                  <div id="allowtoplay-error" class="error"></div>
-                </div>
-              </div>
+              
 
               <div class="row justify-content-end">
                 <div class="col-sm-10">

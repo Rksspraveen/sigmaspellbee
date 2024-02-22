@@ -84,14 +84,9 @@ $registrations = mysqli_query($conn, "SELECT * FROM `users`");
                         elseif ($row['place'] == '2025') echo "Third Year";
                         elseif ($row['place'] == '2024') echo "Fourth Year";
                         ?></td>
-                    <td><?php if ($row['payment_status'] == '0') echo "Not Paid";
-                        elseif ($row['payment_status'] == '1' and $row['status'] == '0') echo "Payment Confirmed";
-                        elseif ($row['payment_status'] == '1' and $row['status'] == '1' and $tresponces == 0) echo "Go and Play";
-                        elseif ($row['payment_status'] == '1' and $row['status'] == '1' and $tresponces < 15) echo "Semi Played";
-                        elseif ($row['payment_status'] == '1' and $row['status'] == '1' and $tresponces == 15) echo "Game Completed";
-                        elseif ($row['payment_status'] > 1 and $row['status'] == '1' and $tresponces == '0') echo "Choose to Replay";
-                        elseif ($row['payment_status'] > 1 and $row['status'] == '1' and $tresponces < '15') echo "Semi Replay";
-                        elseif ($row['payment_status'] > 1 and $row['status'] == '1' and $tresponces == '15') echo "Replayed";
+                    <td><?php if ($row['status'] >= '2') echo "Completed";
+                        elseif ($row['status'] == '1' and $row['points'] == NULL) echo "Ready to Play";
+                        elseif ($row['status'] == '1' and $row['status'] != NULL ) echo "Completed";
                         else echo "Update Status";
                         ?></td>
                     <!-- <td><button type="button" class="btn rounded-pill btn-danger confirm-game" data-toggle="modal" data-target="#confirmationModal" data-pid="<?php echo $row['pid']; ?>">Stop Game</button></td> -->
