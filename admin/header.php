@@ -29,18 +29,6 @@
 
           <li class="menu-item ">
 
-            <a href="dashboard.php" class="menu-link">
-
-              <i class="menu-icon tf-icons bx bx-layout"></i>
-
-              <div data-i18n="Analytics">Dashbord</div>
-
-            </a>
-
-          </li>
-
-          <li class="menu-item ">
-
             <a href="student_datails.php" class="menu-link">
 
               <i class="menu-icon tf-icons bx bx-collection"></i>
