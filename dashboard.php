@@ -1,4 +1,4 @@
-<?php //include 'access_check.php'; ?>
+<?php include 'access_check.php'; ?>
 
 <?php
 
@@ -8,19 +8,13 @@ include 'connect.php';
 
 $sid = $_SESSION['pid'];
 
-$game_points = mysqli_fetch_assoc(mysqli_query($conn, "SELECT `points` from users where pid='$sid'"))['points'];
-if($game_points >= 2700)
-	header('Location: dashboard3.php');
-
 $nqres = mysqli_query($conn, "SELECT count(*) from responses where sid='$sid';");
 
 $qres = mysqli_fetch_array($nqres);
 
-$q = $qres[0] + 1;
+if($qres[0] >16) header("location:dashboard2.php");
 
-$statuscheck = mysqli_fetch_assoc(mysqli_query($conn, "SELECT `status` from users where pid='$sid';"))['status'];
-if ($statuscheck == 0)
-	//header('Location: index.php?stop');
+$q = $qres[0] + 1;
 
 if (isset($_GET['qid'])) {
 	$qid = (int) $_GET['qid'];
@@ -362,9 +356,6 @@ $q = $qres[0] + 1;
 
 										echo "<button class='mb-1 mt-1 mr-1 btn btn-danger' onclick='spell_sound($qid);'><span style='color:#ffffff;'><i class='fas fa-volume-up'></i> SPELL WORD <i class='fas fa-play'></i></span></button>";
 
-										// echo "<button class='mb-1 mt-1 mr-1 btn btn-primary' onclick='spell_human($qid);'><span style='color:#000000;'><i class='fas fa-volume-up'></i> SPELL HUMAN WORD <i class='fas fa-play'></i></span></button>";
-
-										// echo "<div id='spelling'>WRITE THE CORRECT SPELLING IN THE TEXT BOX<div class='col-8'><input type='hidden' name='qid' id='qid' value='$qid'><input type='text' class='form-control' name='answer'  id='answer'  value='' placeholder='Your Spelling Here' style='text-transform:uppercase;' autocomplete='off' REQUIRED></div><div class='col-4'><button type='submit' class='mb-1 mt-1 mr-1 btn btn-success' onclick='check_spelling();'>Submit Spelling</button></div></div>";
 
 										echo '<div>CLICK ON THE RIGHT SPELLING</div>';
 
@@ -501,33 +492,7 @@ $q = $qres[0] + 1;
 		};
 	</script>
 
-	<script>
-		var source = new EventSource("login_alert.php");
-
-		source.onmessage = function(event) {
-
-			if (event.data != "0")
-
-			{
-
-				new PNotify({
-
-					title: 'New Login!',
-
-					text: event.data,
-
-					addclass: 'red notification-primary',
-
-					icon: 'fab fa-twitter',
-
-					delay: 1000
-
-				});
-
-			}
-
-		}
-	</script>
+	
 
 	<br><br>
 

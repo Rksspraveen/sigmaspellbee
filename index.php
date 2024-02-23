@@ -2,7 +2,26 @@
 <html class="fixed">
 
 <head>
-	<?php include "head.php"; ?>
+	<?php 
+	include "head.php";
+	include "connect.php";
+	session_start();
+
+	if(isset($_POST['mobile']) and $_POST['pin'] = "sigma2k24") {
+		$pid = $_POST['mobile'];
+		$check = mysqli_query($conn,"select * from `users` where `pid` = $pid");
+		if(mysqli_num_rows($check) > 0){
+			$profile = mysqli_fetch_assoc($check);
+			$_SESSION['pid']=$profile['pid'];    	
+	 		$_SESSION['player_name']=$profile['player_name'];    	
+	 		$_SESSION['place']=$profile['place'];    	
+	 		$_SESSION['points']=$profile['points'];    	
+			header("location:dashboard.php");
+
+		}
+		else echo "<script>alert('Player Not Register')</script>";
+	}
+	?>
 </head>
 
 <body>
@@ -12,7 +31,7 @@
 		<div class="center-sign">
 			<div class="panel card-sign">
 				<div class="card-body">
-					<form action="dashboard.php" method='post'>
+					<form action="#" method='post'>
 						<div class="current-user text-center">
 							<img src="img/full_logo.jpg" alt="BO HOUSIE" class="rounded-circle user-image" />
 							<h2 class="user-name text-dark m-0" style='font-size:24px;'>SPELL BEE LOGIN</h2>
