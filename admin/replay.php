@@ -147,7 +147,7 @@ $notpayed = mysqli_query($conn, "SELECT * FROM `users` WHERE `points` IS NOT NUL
           }, // Send the user ID to the server
           success: function(response) {
             // Handle the server response if needed
-            console.log("Replay Confirmed successfully.");
+            alert("Replay confirm");
             window.location.reload();
           },
           error: function() {
