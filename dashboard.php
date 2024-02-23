@@ -12,8 +12,6 @@ $nqres = mysqli_query($conn, "SELECT count(*) from responses where sid='$sid';")
 
 $qres = mysqli_fetch_array($nqres);
 
-if($qres[0] >16) header("location:dashboard2.php");
-
 $q = $qres[0] + 1;
 
 if (isset($_GET['qid'])) {
@@ -31,14 +29,7 @@ if (isset($_GET['qid'])) {
 	$level = $answer[3];
 
 	$right = 1;
-
-	if ($q <= 5) {
-		$marks = 100;
-	} else if ($q <= 10) {
-		$marks = 200;
-	} else if ($q <= 15) {
-		$marks = 300;
-	}
+	$marks = 100;
 
 	if ($ranswer != $response) {
 		$marks = 0;
@@ -373,8 +364,9 @@ $q = $qres[0] + 1;
 
 										mysqli_query($conn, "UPDATE users set `points`=$points where pid='$sid';");
 
-										echo "<h3 style='color:red;' align='center'>YOUR SPELL BEE QUIZ HAS BEEN COMPLETED!</h3>";
+
 									}
+									if ($q > 15) echo "<script> window.location = 'dashboard2.php'; </script>";
 
 								?>
 
@@ -386,7 +378,7 @@ $q = $qres[0] + 1;
 
 					<div class="col-xl-4">
 
-					<h5 class="font-weight-semibold text-dark text-uppercase mb-3 mt-3">LEADERBOARD</h5>
+						<h5 class="font-weight-semibold text-dark text-uppercase mb-3 mt-3">LEADERBOARD</h5>
 
 						<div class="row">
 
@@ -406,14 +398,6 @@ $q = $qres[0] + 1;
 
 					</div>
 				
-        			<?php
-
-						$points_res = mysqli_query($conn, "SELECT * from users where pid='$sid';");
-
-						$points = mysqli_fetch_array($points_res);
-
-					?>
-
 				</div>
 
 			</section>

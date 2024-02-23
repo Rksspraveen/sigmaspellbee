@@ -2,9 +2,9 @@
 
 <?php
 
-$right = -1;
-
 include 'connect.php';
+
+$right = -1;
 
 $sid = $_SESSION['pid'];
 
@@ -15,6 +15,8 @@ header('Location: startgame.php');
 $nqres = mysqli_query($conn, "SELECT count(*) from responses where sid='$sid';");
 
 $qres = mysqli_fetch_array($nqres);
+
+if($qres[0] < 15) header("location:dashboard.php");
 
 $q = $qres[0] + 1;
 
@@ -73,48 +75,6 @@ $q = $qres[0] + 1;
 
 		}
 	</style>
-
-
-
-	<?php
-
-	if ($right == 1) {
-	?>
-
-
-
-		<script>
-			var audio = new Audio("sounds/ipl.mp3");
-
-			audio.play();
-
-			var audio = new Audio("sounds/claps.mp3");
-
-			audio.play();
-		</script>
-
-
-
-	<?php
-	}
-
-	if ($right == 0) {
-	?>
-
-
-
-		<script>
-			var audio = new Audio("sounds/aipaye.mp3");
-
-			audio.play();
-		</script>
-
-
-
-	<?php
-	}
-
-	?>
 
 </head>
 
@@ -285,11 +245,11 @@ $q = $qres[0] + 1;
 
 									echo '</div>';
 								} else {
-									$point = mysqli_fetch_assoc(mysqli_query($conn, "SELECT *, sum(marks) as points from responses3 where sid='$sid';"));
+									$point = mysqli_fetch_assoc(mysqli_query($conn, "SELECT *, sum(marks) as points from responses where sid='$sid';"));
 									$points = $point['points'];
 
-									mysqli_query($conn, "UPDATE users3 set `points`=$points where pid='$sid';");
-									if(is_null($point['end_time'])) {mysqli_query($conn, "UPDATE users3 set `end_time`=now() where pid='$sid'");}
+									mysqli_query($conn, "UPDATE users set `points`=$points where pid='$sid';");
+									mysqli_query($conn, "UPDATE users set `end_time`=now() where pid='$sid'");
 
 									echo "<h3 style='color:red;' align='center'>YOUR SPELL BEE QUIZ HAS BEEN COMPLETED!</h3>";
 								?>
@@ -303,12 +263,30 @@ $q = $qres[0] + 1;
 										</th>
 										<tbody>
 											<?php
-											$responces_res = mysqli_query($conn, "SELECT * from responses3 where sid='$sid' order by timestamp LIMIT 35;");
+											$responces_res = mysqli_query($conn, "SELECT * from responses where sid='$sid' order by timestamp ASC LIMIT 15;");
+											$responces_sec = mysqli_query($conn, "SELECT * from responses where sid='$sid' order by timestamp DESC LIMIT 10;");
 											$sno = 1;
 											while ($row = mysqli_fetch_assoc($responces_res)) {
 												$marks = $row['marks'];
 												$answer = $row['answer'];
-												$word = mysqli_fetch_assoc(mysqli_query($conn, "select word from words3 where qid='{$row['qid']}'"))['word'];
+												$qids = $row['qid'];
+												$word = mysqli_fetch_assoc(mysqli_query($conn, "select word from words where qid='$qids'"))['word'];
+												echo "<tr><td align='center'>$sno </td>";
+												echo "<td align='left'>" . strtoupper($word) . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
+												echo "<td align='left'>" . $answer . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><th>";
+												if ($marks > 0) {
+													echo "<span style='color:green;'>RIGHT</span></th>";
+												} else {
+													echo "<span style='color:red;'>WRONG</span></th>";
+												}
+												echo "<td align='center'>" . $marks . "</td></tr>";
+												$sno++;
+											}
+											while ($row = mysqli_fetch_assoc($responces_sec)) {
+												$marks = $row['marks'];
+												$answer = $row['answer'];
+												$qids = $row['qid'];
+												$word = mysqli_fetch_assoc(mysqli_query($conn, "select word from words3 where qid='$qids'"))['word'];
 												echo "<tr><td align='center'>$sno </td>";
 												echo "<td align='left'>" . strtoupper($word) . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
 												echo "<td align='left'>" . $answer . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><th>";
@@ -408,18 +386,6 @@ $q = $qres[0] + 1;
 
 	<script src="vendor/pnotify/pnotify.custom.js"></script>
 
-
-
-	<!-- Theme Custom -->
-
-	<!--<script src="js/custom.js"></script>-->
-
-	<!--<script src="js/housie.js"></script> -->
-
-
-
-	<!-- Theme Initialization Files -->
-
 	<script src="js/theme.init.js"></script>
 
 	<script>
@@ -434,41 +400,13 @@ $q = $qres[0] + 1;
 	</script>
 
 	<script>
-		var source = new EventSource("leaderboard5.php");
+		var source = new EventSource("leaderboard3.php");
 
 		source.onmessage = function(event) {
 
 			document.getElementById('lboard').innerHTML = event.data;
 
 		};
-	</script>
-
-<script>
-		var source = new EventSource("login_alert.php");
-
-		source.onmessage = function(event) {
-
-			if (event.data != "0")
-
-			{
-
-				new PNotify({
-
-					title: 'New Login!',
-
-					text: event.data,
-
-					addclass: 'red notification-primary',
-
-					icon: 'fab fa-twitter',
-
-					delay: 1000
-
-				});
-
-			}
-
-		}
 	</script>
 
 	<script>
@@ -478,7 +416,6 @@ $q = $qres[0] + 1;
 			var answer = document.getElementById('answer').value;
 
 			var len =answer.length;
-
 
 			document.getElementById('spelling').innerHTML = "";
 
@@ -495,11 +432,11 @@ $q = $qres[0] + 1;
 				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 					var response = xmlhttp.responseText;
 					if (response == 0) {
-						document.getElementById('spelling').innerHTML = "<h3 style='color:red'><i class='fa fa-close text-success'></i> Sorry! You Spelled It Wrong!</h3><a href='dashboard4.php'><button type='button' class='mb-1 mt-1 mr-1 btn btn-primary'>NEXT SPELL BEE WORD</button></a></div>";
+						document.getElementById('spelling').innerHTML = "<h3 style='color:red'><i class='fa fa-close text-success'></i> Sorry! You Spelled It Wrong!</h3><a href='dashboard2.php'><button type='button' class='mb-1 mt-1 mr-1 btn btn-primary'>NEXT SPELL BEE WORD</button></a></div>";
 						var audio = new Audio("sounds/aipaye.mp3");
 						audio.play();
 					} else {
-						document.getElementById('spelling').innerHTML = "<h3 style='color:green'><i class='fa fa-check text-success'></i> Hurray! You Spelled It Right!</h3><a href='dashboard4.php'><button type='button' class='mb-1 mt-1 mr-1 btn btn-primary'>NEXT SPELL BEE WORD</button></a></div>";
+						document.getElementById('spelling').innerHTML = "<h3 style='color:green'><i class='fa fa-check text-success'></i> Hurray! You Spelled It Right!</h3><a href='dashboard2.php'><button type='button' class='mb-1 mt-1 mr-1 btn btn-primary'>NEXT SPELL BEE WORD</button></a></div>";
 						var audio = new Audio("sounds/ipl.mp3");
 						audio.play();
 						var audio = new Audio("sounds/claps.mp3");

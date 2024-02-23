@@ -7,19 +7,21 @@
 	include "connect.php";
 	session_start();
 
-	if(isset($_POST['mobile']) and $_POST['pin'] = "sigma2k24") {
-		$pid = $_POST['mobile'];
-		$check = mysqli_query($conn,"select * from `users` where `pid` = $pid");
-		if(mysqli_num_rows($check) > 0){
-			$profile = mysqli_fetch_assoc($check);
-			$_SESSION['pid']=$profile['pid'];    	
-	 		$_SESSION['player_name']=$profile['player_name'];    	
-	 		$_SESSION['place']=$profile['place'];    	
-	 		$_SESSION['points']=$profile['points'];    	
-			header("location:dashboard.php");
-
+	if(isset($_POST['mobile'])) {
+		if($_POST['pin'] == "sigma2k24"){
+			$pid = $_POST['mobile'];
+			$check = mysqli_query($conn,"select * from `users` where `pid` = $pid");
+			if(mysqli_num_rows($check) > 0){
+				$profile = mysqli_fetch_assoc($check);
+				$_SESSION['pid']=$profile['pid'];    	
+				 $_SESSION['player_name']=$profile['player_name'];    	
+				 $_SESSION['place']=$profile['place'];    	
+				 $_SESSION['points']=$profile['points'];    	
+				header("location:dashboard.php");
+			}
+			else echo "<script>alert('Player Not Register')</script>";
 		}
-		else echo "<script>alert('Player Not Register')</script>";
+		else echo "<script>alert('Invalid Secr	et Pin')</script>";
 	}
 	?>
 </head>
@@ -50,7 +52,7 @@
 						<div class="form-group mb-3">
 							<div class="input-group">
 								<!-- <input id="pin" name="pin" type="number" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==4) return false;" class="form-control form-control-lg" placeholder="4 Digit PIN" MAXLENGTH='4' value='' REQUIRED/> -->
-								<input id="pin" name="pin" type="password" class="form-control form-control-lg" placeholder="SECRET PIN" MAXLENGTH='6' value='' autocomplete="off" REQUIRED />
+								<input id="pin" name="pin" type="password" class="form-control form-control-lg" placeholder="SECRET PIN" MAXLENGTH='10' value='' autocomplete="off" REQUIRED />
 								<span class="input-group-append">
 									<span class="input-group-text">
 										<i class="fas fa-th-large"></i>
