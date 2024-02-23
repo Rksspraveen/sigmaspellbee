@@ -8,6 +8,10 @@ include 'connect.php';
 
 $sid = $_SESSION['pid'];
 
+$checkstart = mysqli_fetch_assoc(mysqli_query($conn, "SELECT `start_time` from users where pid='$sid';"))['start_time'];
+if ($checkstart == NULL)
+header('Location: startgame.php');
+
 $nqres = mysqli_query($conn, "SELECT count(*) from responses where sid='$sid';");
 
 $qres = mysqli_fetch_array($nqres);
